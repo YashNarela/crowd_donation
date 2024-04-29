@@ -8,6 +8,8 @@ const UserSchema=new Schema({
     profilepic:{type:String},
     coverpic:{type:String},
     createdAt:{type:Date, default:Date.now },
+    razorpayid:{type:String},
+    razorpaysecert:{type:String},
     updatedAt:{type:Date, default:Date.now }
 
 })

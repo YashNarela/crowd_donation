@@ -3,26 +3,75 @@ import React, { useEffect, useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react'
 
  import { useRouter } from 'next/navigation' 
+ import {fetchuser, updateProfile } from '../action/usersaction';
+ import { ToastContainer, toast } from 'react-toastify';
+
+  import 'react-toastify/dist/ReactToastify.css';
+
 
  const Dashboard =() => {
-    const {data:session}=useSession()
+    const {data:session,update}=useSession()
 
 const router = useRouter ()
 
 const [form, setform] =useState({})
 
 useEffect(() => {
+    getData()
 if (!session) {
 router.push('/login')
  }
  }, [router, session])
+
+const getData=async()=>{
+    let u= await fetchuser(session.user.name)
+    setform(u)
+
+}
+
+
 const handleChange=(e) => {
 setform({...form, [e.target. name]: e.target.value})}
+
+
+const handleSubmit=async (e)=>{
+
+    let a= await updateProfile(e,session.user.name)
+    toast('Profile Updated', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+}
 return (
-    
+    <>
+<ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+
+/>
+{/* Same as */}
+<ToastContainer />
+
+
+
 <div className='container mx-auto py-5'>
 < h1 className='text-center my-5 text-3xl font-bold' >Welcome to youDashboard</h1>
-<form className=" max-w-2xl mx-auto">
+<form className=" max-w-2xl mx-auto " action={handleSubmit}>
 
 <div className='my-2'>
 <label htmlfor="name" className="block mb-2 text-sm font-medium text-white dark:text-white"> Name </label> <input value={form.name?form.name: ""} onChange={handleChange} type="name" name= "name" id="name" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
@@ -43,24 +92,24 @@ return (
 </div>
 
 <div className='my-2'>
-<label htmlfor="profile" className="block mb-2 text-sm font-medium text-white dark:text-white"> Profile</label> <input value={form.profile?form.profile: ""} onChange={handleChange} type="text" name= "profile" id="profile" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
+<label htmlfor="profilepic" className="block mb-2 text-sm font-medium text-white dark:text-white"> Profile</label> <input value={form.profilepic?form.profilepic: ""} onChange={handleChange} type="text" name= "profilepic" id="profilepic" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
 
 
 </div>
 
 <div className='my-2'>
-<label htmlfor="cover" className="block mb-2 text-sm font-medium text-white dark:text-white"> Cover </label> <input value={form.cover?form.cover: ""} onChange={handleChange} type="text" name= "cover" id="cover" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
+<label htmlfor="coverpic" className="block mb-2 text-sm font-medium text-white dark:text-white"> Cover </label> <input value={form.coverpic?form.coverpic: ""} onChange={handleChange} type="text" name= "coverpic" id="coverpic" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
 
 
 </div>
 
 <div className='my-2'>
-<label htmlfor="razorpay" className="block mb-2 text-sm font-medium text-white dark:text-white"> RazorPayId </label> <input value={form.razorpayid?form.razorpayid: ""} onChange={handleChange} type="text" name= "razorpayid" id="razorpayid" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
+<label htmlfor="razorpayid" className="block mb-2 text-sm font-medium text-white dark:text-white"> RazorPayId </label> <input value={form.razorpayid?form.razorpayid: ""} onChange={handleChange} type="text" name= "razorpayid" id="razorpayid" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
 
 
 </div>
 <div className='my-2'>
-<label htmlfor="razorpay" className="block mb-2 text-sm font-medium text-white dark:text-white"> RazorPaySecret </label> <input value={form.razorpaysecret?form.razorpaysecret: ""} onChange={handleChange} type="text" name= "razorpaysecret" id="razorpaysecret" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
+<label htmlfor="razorpaysecret" className="block mb-2 text-sm font-medium text-white dark:text-white"> RazorPaySecret </label> <input value={form.razorpaysecret?form.razorpaysecret: ""} onChange={handleChange} type="text" name= "razorpaysecret" id="razorpaysecret" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-560 focus :border-blue-560dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/> 
 
 
 </div>
@@ -70,6 +119,7 @@ return (
 </div>
 </form>
 </div>
+</>
 )}
 
 
